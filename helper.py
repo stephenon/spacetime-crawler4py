@@ -1,13 +1,6 @@
-'''
-from lxml import html
+import re
+# FILE WITH HELPER FUNCTIONS FOR scraper.py
 
-if __name__ == "__main__":
-    source_code = html.parse("index.html")
-    #print(type(source_code))
-    #print(source_code.text_content())
-    print(source_code.xpath("string()"))
-    links = source_code.xpath('//a/@href') # list of all links on current page
-'''
 stopwords = {"how's", 'between', 'their', 'cannot', 'does', "doesn't", 'same', 'of', "couldn't", "you'd", "hadn't", 'most',
     "mustn't", 'be', 'through', 'nor', "he'd", "won't", 'into', 'an', "they'd", "when's", "who's", 'if', "we're", 'below', 'for',
     "haven't", 'only', 'you', 'your', 'then', 'is', "we'll", 'by', 'me', "there's", 'ourselves', "why's", "weren't", "i'd",
@@ -21,5 +14,45 @@ stopwords = {"how's", 'between', 'their', 'cannot', 'does', "doesn't", 'same', '
     'not', 'when', "i've", 'himself', 'we', "wouldn't", 'them', 'a', "she's", 'could', "you're", 'his', "aren't", 'any',
     "they're", "he'll", "hasn't", 'that', 'further', 'which', 'themselves', "i'm", 'in', 'the', 'own', "we'd", 'ought', 'her',
     'him'}
-if __name__ == "__main__":
-    print(len(stopwords))
+
+'''
+O(n) where n is the number of tokens in the input file.
+
+Runs over entire file once to gather all the tokens, then
+runs over all the tokens again, lowering them all to lower case
+
+O(n) + O(n) = O(n)
+
+Arguments:
+htmlstring: string containing html content of page
+'''
+# ADJUSTED FOR STRING ARGUMENT INSTEAD OF TEXTFILEPATH
+def tokenize(htmlstring):
+    tokens = re.findall(r'[a-zA-Z0-9]+', htmlstring) # list of tokens
+
+    # lower tokens before returning
+    for i in range(0, len(tokens)):
+        tokens[i] = tokens[i].lower()
+    return tokens
+
+'''
+O(n) where n is the number of tokens in the input
+
+Iterates over all the tokens in the input,
+adding it to a dictionary or updating the value if the token already
+exists within the dictionary
+
+O(1) look uptime to check for token membership in dictionary or to update existing value
+
+O(n) * O(1) = O(n)
+
+'''
+def computeWordFrequencies(tokens):
+    frequencies = {}
+    for token in tokens:
+        if token not in stopwords:
+            if token not in frequencies:
+                frequencies[token] = 1
+            else:
+                frequencies[token] += 1
+    return frequencies

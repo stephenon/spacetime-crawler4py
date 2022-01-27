@@ -1,6 +1,8 @@
 import re
 from urllib.parse import urlparse, urldefrag
 from lxml import html
+from lxml.html.clean import Cleaner
+from helper import tokenize, computeWordFrequencies
 
 # global data structures
 # visited_pages = set()
@@ -12,7 +14,8 @@ def scraper(url, resp):
     links = extract_next_links(url, resp)
 
     # links from extract_next_links that pass validation check
-    return [link for link in links]   #[link for link in links if is_valid(link)]
+    #return [link for link in links]   #[link for link in links if is_valid(link)]
+    return [link for link in links if is_valid(link)]
 
 def extract_next_links(url, resp):
     # Implementation required.
@@ -27,22 +30,33 @@ def extract_next_links(url, resp):
     # RETURNS EMPTY LIST OF URLS FOR EMPTY RESPONSE(?)
     
     '''-----------------------------------------------------------'''
-    visited_pages.add(url)
+    #visited_pages.add(url)
     # TODO: just urls(hyperlinks) from page
     # checking for status 200 OK
     if resp.status != 200:
         return list()
 
     # read HTML from resp.raw_response.content
+    # read urls before clean
     source_code = html.fromstring(resp.raw_response.content)
-    #print(type(source_code))
-    #print(source_code.text_content())
     links = source_code.xpath('//a/@href') # list of all links on current page
+
+    # clean html for text reading
+    cleaner = Cleaner(scripts=True, style=True) # cleaner for removing scripts and style tags/content
+    cleanedhtml = cleaner.clean_html(resp.raw_response.content) # type bytes (same as resp.raw_response.content)
+    source_code = html.fromstring(cleanedhtml)
+    textcontent = str(source_code.text_content())
+    
+    tokens = tokenize(textcontent)
+    tokens = computeWordFrequencies(tokens)
+    print(tokens)
+    #print(source_code.text_content()) # after clean
     
     # defragment urls
     links = [urldefrag(url)[0] for url in links] # urldefrag returns a named tuple (defragmented url, fragment)
 
     # extract information from content for report
+    # 
 
     return links
 
@@ -61,7 +75,7 @@ def is_valid(url):
             return False
         if parsed.scheme not in set(["http", "https"]):
             return False
-        if re.match(r"^\.today\.uci\.edu"):
+        if re.match(r"^\.today\.uci\.edu", parsed.netloc): # NOT SURE, NEED TO DOUBLE CHECK
             if not re.match(r"^department\/information_computer_sciences\/.*$", parsed.path):
                 return False
         if not re.match(r"^.*\.(ics\.uci\.edu|cs\.uci\.edu|informatics\.uci\.edu|stats\.uci\.edu|today\.uci\.edu)$", parsed.netloc):

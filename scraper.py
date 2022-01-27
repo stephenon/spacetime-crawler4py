@@ -3,7 +3,9 @@ from urllib.parse import urlparse, urldefrag
 from lxml import html
 
 # global data structures
-visited_pages = set()
+# visited_pages = set()
+# VISITED_PAGES CHANGED TO DICTIONARY
+visited_pages = {}
 
 
 def scraper(url, resp):
@@ -33,12 +35,12 @@ def extract_next_links(url, resp):
 
     # read HTML from resp.raw_response.content
     source_code = html.fromstring(resp.raw_response.content)
-    print(type(source_code))
-    print(source_code.text_content())
+    #print(type(source_code))
+    #print(source_code.text_content())
     links = source_code.xpath('//a/@href') # list of all links on current page
     
     # defragment urls
-    links = [urldefrag(url) for url in links]
+    links = [urldefrag(url)[0] for url in links] # urldefrag returns a named tuple (defragmented url, fragment)
 
     # extract information from content for report
 

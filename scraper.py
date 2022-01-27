@@ -1,8 +1,11 @@
 import re
 from urllib.parse import urlparse
+from lxml import html
 
 def scraper(url, resp):
     links = extract_next_links(url, resp)
+
+    # links from extract_next_links that pass validation check
     return [link for link in links if is_valid(link)]
 
 def extract_next_links(url, resp):
@@ -15,7 +18,25 @@ def extract_next_links(url, resp):
     #         resp.raw_response.url: the url, again
     #         resp.raw_response.content: the content of the page!
     # Return a list with the hyperlinks (as strings) scrapped from resp.raw_response.content
-    return list()
+    # RETURNS EMPTY LIST OF URLS FOR EMPTY RESPONSE(?)
+    
+    '''-----------------------------------------------------------'''
+
+    # TODO: just urls(hyperlinks) from page
+
+    # checking for status 200 OK
+    if resp.status != 200:
+        return list()
+    
+    # read HTML from resp.raw_response.content
+    #etree.parse(resp.raw_response.content)
+    #print("hello")
+    #print(type(resp.raw_response.content))
+    source_code = html.fromstring(resp.raw_response.content)
+    #print(source_code.xpath('//a/@href'))
+
+    #return list()
+    return source_code.xpath('//a/@href')
 
 def is_valid(url):
     # Decide whether to crawl this url or not. 

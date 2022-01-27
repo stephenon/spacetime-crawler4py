@@ -2,6 +2,9 @@ import re
 from urllib.parse import urlparse
 from lxml import html
 
+# global data structures for report
+counter = 0
+
 def scraper(url, resp):
     links = extract_next_links(url, resp)
 
@@ -23,21 +26,25 @@ def extract_next_links(url, resp):
     '''-----------------------------------------------------------'''
 
     # TODO: just urls(hyperlinks) from page
-
+    global counter
     # checking for status 200 OK
     if resp.status != 200:
         return list()
     
     # read HTML from resp.raw_response.content
-    #etree.parse(resp.raw_response.content)
-    #print("hello")
-    #print(type(resp.raw_response.content))
     source_code = html.fromstring(resp.raw_response.content)
-    #print(source_code.xpath('//a/@href'))
+    links = source_code.xpath('//a/@href') # list of all links on current page
+    counter += len(links)
+    print(counter)
+    # defragment urls
+    # extract information from content for report
 
-    #return list()
-    return source_code.xpath('//a/@href')
+    return links
 
+
+# handle relative vs absolute urls
+# check if under valid domains
+# check for subdomains
 def is_valid(url):
     # Decide whether to crawl this url or not. 
     # If you decide to crawl it, return True; otherwise return False.

@@ -7,10 +7,16 @@ TODO: Crawl all pages with high textual information content
 
 TODO: Detect and avoid infinite traps
     - avoid previously visited Links
-    - avoid similar pages (seen in lecture notes?)
+    - avoid similar pages (seen in lecture notes?) IGNORE THIS
+    - regex for url patterns
 
 TODO: Detect and avoid sets of similar pages with no information
+    - pages with url patterns(?)
+
 
 TODO: Detect and avoid dead URLs that return a 200 status but no data (click here to see what the different HTTP status codes mean (Links to an external site.))
 
 TODO: Detect and avoid crawling very large files, especially if they have low information value
+    - low information value
+        - likely for pages that fall under a pattern to repeat information
+    - age?

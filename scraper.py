@@ -1,15 +1,16 @@
 import re
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urldefrag
 from lxml import html
 
-# global data structures for report
-counter = 0
+# global data structures
+visited_pages = set()
+
 
 def scraper(url, resp):
     links = extract_next_links(url, resp)
 
     # links from extract_next_links that pass validation check
-    return [link for link in links if is_valid(link)]
+    return [link for link in links]   #[link for link in links if is_valid(link)]
 
 def extract_next_links(url, resp):
     # Implementation required.
@@ -24,19 +25,21 @@ def extract_next_links(url, resp):
     # RETURNS EMPTY LIST OF URLS FOR EMPTY RESPONSE(?)
     
     '''-----------------------------------------------------------'''
-
+    visited_pages.add(url)
     # TODO: just urls(hyperlinks) from page
-    global counter
     # checking for status 200 OK
     if resp.status != 200:
         return list()
-    
+
     # read HTML from resp.raw_response.content
     source_code = html.fromstring(resp.raw_response.content)
+    print(type(source_code))
+    print(source_code.text_content())
     links = source_code.xpath('//a/@href') # list of all links on current page
-    counter += len(links)
-    print(counter)
+    
     # defragment urls
+    links = [urldefrag(url) for url in links]
+
     # extract information from content for report
 
     return links
@@ -51,7 +54,15 @@ def is_valid(url):
     # There are already some conditions that return False.
     try:
         parsed = urlparse(url)
+        
+        if url in visited_pages:
+            return False
         if parsed.scheme not in set(["http", "https"]):
+            return False
+        if re.match(r"^\.today\.uci\.edu"):
+            if not re.match(r"^department\/information_computer_sciences\/.*$", parsed.path):
+                return False
+        if not re.match(r"^.*\.(ics\.uci\.edu|cs\.uci\.edu|informatics\.uci\.edu|stats\.uci\.edu|today\.uci\.edu)$", parsed.netloc):
             return False
         return not re.match(
             r".*\.(css|js|bmp|gif|jpe?g|ico"

@@ -55,4 +55,6 @@ def computeWordFrequencies(tokens):
                 frequencies[token] = 1
             else:
                 frequencies[token] += 1
+        #if token in stopwords:
+        #    print("stopword: " + token)
     return frequencies

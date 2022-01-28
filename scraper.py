@@ -8,7 +8,25 @@ from helper import tokenize, computeWordFrequencies
 # visited_pages = set()
 # VISITED_PAGES CHANGED TO DICTIONARY
 visited_pages = {}
+longest_page = {"url" : "http://www.ics.uci.edu", "number of words" : 0}
 
+# variables for debugging
+DEBUG = True
+
+# for reporting global variables results at end of crawl, will be called in launch.py
+# only prints report during DEBUGGING
+def report():
+    if DEBUG:
+        # 1
+        print("Report Question #1:")
+        print(f"Visited {len(visited_pages)} UNIQUE pages")
+        # 2, stop words are excluded from count
+        print("Report Question #2:")
+        print(f"Longest page: {longest_page["url"]}")
+        print(f"Number of words: {longest_page["number of words"]}")
+        # 3, most common 50 words
+        print("Report Question #3:")
+        
 
 def scraper(url, resp):
     links = extract_next_links(url, resp)
@@ -30,13 +48,13 @@ def extract_next_links(url, resp):
     # RETURNS EMPTY LIST OF URLS FOR EMPTY RESPONSE(?)
     
     '''-----------------------------------------------------------'''
-    #visited_pages.add(url)
-    # TODO: just urls(hyperlinks) from page
+    global visited_pages, longest_page
+    visited_pages[url] = {} # visited_page with error might cause problems? if dictionary isn't properly formatted
     # checking for status 200 OK
     if resp.status != 200:
         return list()
 
-    # read HTML from resp.raw_response.content
+    # read HTML from resp.raw_response.content for report
     # read urls before clean
     source_code = html.fromstring(resp.raw_response.content)
     links = source_code.xpath('//a/@href') # list of all links on current page
@@ -49,14 +67,21 @@ def extract_next_links(url, resp):
     
     tokens = tokenize(textcontent)
     tokens = computeWordFrequencies(tokens)
-    print(tokens)
-    #print(source_code.text_content()) # after clean
+
+    # update globals
+    visited_pages[url] = tokens # update visited_pages
+    wordtotal = sum(visited_pages[url].values())
+    if wordtotal > longest_page["number of words"]: # update longest_page if needed
+        longest_page["url"] = url
+        longest_page["number of words"] = wordtotal
+
+
+    #print(type(url))
+
+
     
     # defragment urls
     links = [urldefrag(url)[0] for url in links] # urldefrag returns a named tuple (defragmented url, fragment)
-
-    # extract information from content for report
-    # 
 
     return links
 
@@ -68,6 +93,7 @@ def is_valid(url):
     # Decide whether to crawl this url or not. 
     # If you decide to crawl it, return True; otherwise return False.
     # There are already some conditions that return False.
+
     try:
         parsed = urlparse(url)
         

@@ -1,12 +1,14 @@
-'''
+
 from lxml import html
 
 if __name__ == "__main__":
     source_code = html.parse("index.html")
     #print(type(source_code))
-    #print(source_code.text_content())
-    print(source_code.xpath("string()"))
+    print(source_code.text_content())
+    #print(source_code.xpath("string()"))
+
     links = source_code.xpath('//a/@href') # list of all links on current page
+
 '''
 stopwords = {"how's", 'between', 'their', 'cannot', 'does', "doesn't", 'same', 'of', "couldn't", "you'd", "hadn't", 'most',
     "mustn't", 'be', 'through', 'nor', "he'd", "won't", 'into', 'an', "they'd", "when's", "who's", 'if', "we're", 'below', 'for',
@@ -23,3 +25,4 @@ stopwords = {"how's", 'between', 'their', 'cannot', 'does', "doesn't", 'same', '
     'him'}
 if __name__ == "__main__":
     print(len(stopwords))
+'''

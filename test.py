@@ -1,4 +1,10 @@
-
+import requests
+from lxml import html
+evoke = "https://evoke.ics.uci.edu/about/the-evoke-studio/"
+url = "https://wics.ics.uci.edu/events/2021-03-02/"
+res = requests.get(url)
+lxml.html.parse
+'''
 from lxml import html
 
 def compute_fingerprint(text_str):
@@ -31,7 +37,7 @@ if __name__ == "__main__":
         revolution; in another, evolve, revolve; in another, farce, force, etc. \
         All who might desire to read part of this book may not care for other")
     print(finger_print)
-
+'''
 '''
 stopwords = {"how's", 'between', 'their', 'cannot', 'does', "doesn't", 'same', 'of', "couldn't", "you'd", "hadn't", 'most',
     "mustn't", 'be', 'through', 'nor', "he'd", "won't", 'into', 'an', "they'd", "when's", "who's", 'if', "we're", 'below', 'for',

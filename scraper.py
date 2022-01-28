@@ -18,7 +18,7 @@ DEBUG = True
 # only prints report during DEBUGGING
 def report():
     if DEBUG:
-        # 1
+        # 1, num of UNIQUE pages visited
         print("Report Question #1:")
         print(f"Visited {len(visited_pages)} UNIQUE pages")
         # 2, stop words are excluded from count
@@ -103,11 +103,16 @@ def extract_next_links(url, resp):
 
 
     #print(type(url))    
-    # defragment urls
-    links = [urldefrag(url)[0] for url in links] # urldefrag returns a named tuple (defragmented url, fragment)
+    # defragment and dequery urls
+    #links = [urldefrag(url)[0] for url in links] # urldefrag returns a named tuple (defragmented url, fragment)
+    links = [urldeqf(url) for url in links]
 
     return links
 
+def deqf(url):
+    parsed = urlparse(url)
+    return parsed._replace(query="")._replace(fragment="").geturl()
+    #return parsed.scheme + "://" + parsed.netloc + parsed.path
 
 # handle relative vs absolute urls
 # check if under valid domains

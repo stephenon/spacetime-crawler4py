@@ -28,7 +28,7 @@ htmlstring: string containing html content of page
 '''
 # ADJUSTED FOR STRING ARGUMENT INSTEAD OF TEXTFILEPATH
 def tokenize(htmlstring):
-    tokens = re.findall(r'[a-zA-Z0-9]+', htmlstring) # list of tokens
+    tokens = re.findall(r'[a-zA-Z0-9\']{3,}', htmlstring) # list of tokens
 
     # lower tokens before returning
     for i in range(0, len(tokens)):

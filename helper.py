@@ -58,3 +58,33 @@ def computeWordFrequencies(tokens):
         #if token in stopwords:
         #    print("stopword: " + token)
     return frequencies
+
+'''
+Argument:
+visited_pages from scraper.py
+
+returns a dictionary with the total count for each word across all crawled urls
+'''
+def allWordFrequencies(pages):
+    frequencies = {}
+    for url in pages:
+        for word in pages[url]:
+            if word not in frequencies:
+                frequencies[word] = pages[url][word]
+            else:
+                frequencies[word] += pages[url][word]
+    return frequencies
+
+'''
+Argument:
+output of allWordFrequencies
+
+Returns a list of top 50 words ordered by frequency (descending)
+'''
+def maxFifty(frequencies):
+    top50 = []
+    for i in range(50):
+        topword = max(frequencies, key=lambda x: x[1])
+        top50.append(topword)
+        del frequencies[topword]
+    return top50

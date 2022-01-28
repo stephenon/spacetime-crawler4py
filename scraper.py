@@ -2,7 +2,7 @@ import re
 from urllib.parse import urlparse, urldefrag
 from lxml import html
 from lxml.html.clean import Cleaner
-from helper import tokenize, computeWordFrequencies
+from helper import tokenize, computeWordFrequencies, allWordFrequencies
 
 # global data structures
 # visited_pages = set()
@@ -22,10 +22,12 @@ def report():
         print(f"Visited {len(visited_pages)} UNIQUE pages")
         # 2, stop words are excluded from count
         print("Report Question #2:")
-        print(f"Longest page: {longest_page["url"]}")
-        print(f"Number of words: {longest_page["number of words"]}")
+        print(f"Longest page: {longest_page['url']}")
+        print(f"Number of words: {longest_page['number of words']}")
         # 3, most common 50 words
         print("Report Question #3:")
+        frequencies = allWordFrequencies(visited_pages)
+        sorted(frequencies.items(), key=lambda x: x[1], reverse=True)
         
 
 def scraper(url, resp):

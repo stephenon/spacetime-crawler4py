@@ -2,15 +2,14 @@ import re
 from urllib.parse import urlparse, urldefrag
 from lxml import html
 from lxml.html.clean import Cleaner
-from helper import tokenize, computeWordFrequencies, allWordFrequencies
+from helper import tokenize, computeWordFrequencies, allWordFrequencies, maxFifty
 
 # global data structures
-# visited_pages = set()
-# VISITED_PAGES CHANGED TO DICTIONARY
-
-DUPLICATE_THRESHOLD = 0.9
-visited_pages = {}
+DUPLICATE_THRESHOLD = 0.8
+visited_pages = dict()
 longest_page = {"url" : "http://www.ics.uci.edu", "number of words" : 0}
+iue_subdomains = dict() # urls : num of unique pages
+fingerprints = set()
 
 # variables for debugging
 DEBUG = True
@@ -29,7 +28,11 @@ def report():
         # 3, most common 50 words
         print("Report Question #3:")
         frequencies = allWordFrequencies(visited_pages)
-        sorted(frequencies.items(), key=lambda x: x[1], reverse=True)
+        print(maxFifty(frequencies))
+        # 4, ics.uci.edu subdomains
+        print("Report Question #4:")
+        print(sorted(iue_subdomains.items()))
+
         
 
 def scraper(url, resp):
@@ -52,7 +55,7 @@ def extract_next_links(url, resp):
     # RETURNS EMPTY LIST OF URLS FOR EMPTY RESPONSE(?)
     
     '''-----------------------------------------------------------'''
-    global visited_pages, longest_page
+    global visited_pages, longest_page, fingerprints
     visited_pages[url] = {} # visited_page with error might cause problems? if dictionary isn't properly formatted
     # checking for status 200 OK
     if resp.status != 200:
@@ -69,21 +72,35 @@ def extract_next_links(url, resp):
     source_code = html.fromstring(cleanedhtml)
     textcontent = str(source_code.text_content())
     
-    tokens = tokenize(textcontent)
-    tokens = computeWordFrequencies(tokens)
+    tokens = tokenize(textcontent) # list
+    #tokens = computeWordFrequencies(tokens) # dictionary
+
+    # store fingerprint for current url
+    cur_fp = compute_fingerprint(tokens)
+    if detect_near_similars(cur_fp):
+        return []
+    else:
+        fingerprints.add(tuple(cur_fp))
 
     # update globals
+    tokens = computeWordFrequencies(tokens) # dictionary
     visited_pages[url] = tokens # update visited_pages
+    
     wordtotal = sum(visited_pages[url].values())
     if wordtotal > longest_page["number of words"]: # update longest_page if needed
         longest_page["url"] = url
         longest_page["number of words"] = wordtotal
 
+    parsed = urlparse(url)
+    domain = parsed.scheme + "://" + parsed.netloc
+    if "ics.uci.edu" in domain:
+        if domain in iue_subdomains:
+            iue_subdomains[domain] += 1
+        else:
+            iue_subdomains[domain] = 1
 
-    #print(type(url))
 
-
-    
+    #print(type(url))    
     # defragment urls
     links = [urldefrag(url)[0] for url in links] # urldefrag returns a named tuple (defragmented url, fragment)
 
@@ -124,8 +141,41 @@ def is_valid(url):
         print ("TypeError for ", parsed)
         raise
 
+
+# takes in a fingerprint and checks fingerprint dictionary for a match
+# Arguments: 
+# cur_fp, list of integers representing the fingerprint
+def detect_near_similars(cur_fp):
+    global fingerprints
+    for fp in fingerprints:
+        if similar(fp, cur_fp):
+            return True
+    return False
+
+
+def similar(A, B):
+    global DUPLICATE_THRESHOLD
+    s = len([i for i in A if i in B]) / (len(A) + len(B))
+    return s >= DUPLICATE_THRESHOLD
+
+
 #detect near duplicates using fingerprint method
-def compute_fingerprint(text_str):
-    triple_lst = [] WAIT WEAIT I NEED TO PUSH CUZ THIS IS GONNA CLOSE
-    for i in range(len(text_str)-2):
-        OK 
+def compute_fingerprint(tokens):
+    triple_lst = []
+    #print(tokens)
+    # add triplets to triple_lst
+    for i in range(len(tokens)-2):
+        triple_lst.append([tokens[i], tokens[i+1], tokens[i+2]])
+    
+    # hash each triplet
+    hashed_lst = [fingerprint_hash(lst) for lst in triple_lst]
+    res = [v for v in hashed_lst if v % 4 == 0]
+    return res
+
+
+def fingerprint_hash(word):
+    res = 0
+    for w in word:
+        for c in w:
+            res += ord(c)
+    return res

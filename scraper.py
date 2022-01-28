@@ -7,6 +7,8 @@ from helper import tokenize, computeWordFrequencies, allWordFrequencies
 # global data structures
 # visited_pages = set()
 # VISITED_PAGES CHANGED TO DICTIONARY
+
+DUPLICATE_THRESHOLD = 0.9
 visited_pages = {}
 longest_page = {"url" : "http://www.ics.uci.edu", "number of words" : 0}
 
@@ -121,3 +123,9 @@ def is_valid(url):
     except TypeError:
         print ("TypeError for ", parsed)
         raise
+
+#detect near duplicates using fingerprint method
+def compute_fingerprint(text_str):
+    triple_lst = [] WAIT WEAIT I NEED TO PUSH CUZ THIS IS GONNA CLOSE
+    for i in range(len(text_str)-2):
+        OK 

@@ -84,7 +84,7 @@ Returns a list of top 50 words ordered by frequency (descending)
 def maxFifty(frequencies):
     top50 = []
     for i in range(50):
-        topword = max(frequencies, key=lambda x: x[1])
-        top50.append(topword)
-        del frequencies[topword]
+        topword = max(frequencies.items(), key=lambda x: x[1])
+        top50.append(topword[0])
+        del frequencies[topword[0]]
     return top50

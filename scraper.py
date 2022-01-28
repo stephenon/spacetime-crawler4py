@@ -5,7 +5,7 @@ from lxml.html.clean import Cleaner
 from helper import tokenize, computeWordFrequencies, allWordFrequencies, maxFifty
 
 # global data structures
-DUPLICATE_THRESHOLD = 0.8
+DUPLICATE_THRESHOLD = 0.5
 visited_pages = dict()
 longest_page = {"url" : "http://www.ics.uci.edu", "number of words" : 0}
 iue_subdomains = dict() # urls : num of unique pages
@@ -77,8 +77,10 @@ def extract_next_links(url, resp):
 
     # store fingerprint for current url
     cur_fp = compute_fingerprint(tokens)
-    if detect_near_similars(cur_fp):
-        return []
+    #print("cur_fp len: " + str(len(cur_fp)))
+    if len(cur_fp) == 0 or detect_near_similars(cur_fp):
+        print("SIMILARTY DETECTED")
+        return list()
     else:
         fingerprints.add(tuple(cur_fp))
 

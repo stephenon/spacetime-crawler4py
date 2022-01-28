@@ -1,0 +1,25 @@
+Exception in thread Thread-1:
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/threading.py", line 926, in _bootstrap_inner
+    self.run()
+  File "/Users/stephen/Documents/CS121/spacetime-crawler4py/crawler/worker.py", line 29, in run
+    scraped_urls = scraper.scraper(tbd_url, resp)
+  File "/Users/stephen/Documents/CS121/spacetime-crawler4py/scraper.py", line 39, in scraper
+    links = extract_next_links(url, resp)
+  File "/Users/stephen/Documents/CS121/spacetime-crawler4py/scraper.py", line 80, in extract_next_links
+    if detect_near_similars(cur_fp):
+  File "/Users/stephen/Documents/CS121/spacetime-crawler4py/scraper.py", line 151, in detect_near_similars
+    if similar(fp, cur_fp):
+  File "/Users/stephen/Documents/CS121/spacetime-crawler4py/scraper.py", line 158, in similar
+    s = len([i for i in A if i in B]) / (len(A) + len(B))
+ZeroDivisionError: division by zero
+
+Report Question #1:
+Visited 89 UNIQUE pages
+Report Question #2:
+Longest page: https://www.ics.uci.edu/faculty
+Number of words: 3327
+Report Question #3:
+['uci', 's', 'computer', 'ics', 'research', '1', 'bren', 'will', 'school', 'edu', 'information', 'policies', 'department', 'student', '2021', 'design', 'course', 'science', 'students', 'class', 'game', 'office', 'm', 'software', 'informatics', 'email', 'graduate', 'academic', 'dbh', 'd', 'faculty', '2', 'phone', 'donald', 'contact', '949', 'w', '824', 'program', 'computing', 'j', 'work', 'area', 'x', 'professor', 'events', 'support', '0', 'irvine', 'undergraduate']
+Report Question #4:
+[('http://intranet.ics.uci.edu', 1), ('http://keys.ics.uci.edu', 1), ('http://mhcid.ics.uci.edu', 1), ('http://www.ics.uci.edu', 24), ('http://www.informatics.uci.edu', 2), ('https://mhcid.ics.uci.edu', 13), ('https://statconsulting.ics.uci.edu', 1), ('https://support.ics.uci.edu', 1), ('https://swiki.ics.uci.edu', 1), ('https://tippersweb.ics.uci.edu', 2), ('https://transformativeplay.ics.uci.edu', 9), ('https://www.ics.uci.edu', 21), ('https://www.informatics.uci.edu', 3)]

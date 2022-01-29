@@ -8,7 +8,7 @@ DUPLICATE_THRESHOLD = 0.75
 # cur_fp, list of integers representing the fingerprint
 def detect_near_similars(cur_fp, fingerprints):
     for fp in fingerprints:
-        if similar(fp, cur_fp):
+        if similar(set(fp), set(cur_fp)):
             return True
     return False
 
@@ -35,7 +35,7 @@ def compute_fingerprint(tokens):
     
     # hash each triplet
     hashed_lst = [fingerprint_hash(lst) for lst in triple_lst]
-    res = set(v for v in hashed_lst if v % 4 == 0)
+    res = [v for v in hashed_lst if v % 4 == 0]
     return res
 
 

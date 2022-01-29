@@ -92,5 +92,5 @@ def maxFifty(frequencies):
 
 def deqf(url):
     parsed = urlparse(url)
-    return parsed._replace(query="")._replace(fragment="").geturl()
+    return parsed._replace(fragment="").geturl()
     #return parsed.scheme + "://" + parsed.netloc + parsed.path

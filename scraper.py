@@ -3,9 +3,9 @@ from urllib.parse import urlparse
 from lxml import html
 from lxml.html.clean import Cleaner
 from helper import tokenize, computeWordFrequencies, allWordFrequencies, maxFifty, deqf
+from detection import *
 
 # global data structures
-DUPLICATE_THRESHOLD = 0.75
 visited_pages = dict()
 longest_page = {"url" : "http://www.ics.uci.edu", "number of words" : 0}
 iue_subdomains = dict() # urls : num of unique pages
@@ -78,7 +78,7 @@ def extract_next_links(url, resp):
     # store fingerprint for current url
     cur_fp = compute_fingerprint(tokens)
     #print("cur_fp len: " + str(len(cur_fp)))
-    if len(cur_fp) == 0 or detect_near_similars(cur_fp):
+    if len(cur_fp) == 0 or detect_near_similars(cur_fp, fingerprints):
         print("SIMILARTY DETECTED")
         return list()
     else:
@@ -119,7 +119,10 @@ def is_valid(url):
 
     try:
         parsed = urlparse(url)
-        
+        # TO TEST QUESTION 4
+        #if len(visited_pages) >= 20:
+        #    return False
+        # END OF TESTING QUESTION 4
         if url in visited_pages:
             return False
         if parsed.scheme not in set(["http", "https"]):
@@ -143,47 +146,3 @@ def is_valid(url):
         print ("TypeError for ", parsed)
         raise
 
-
-# takes in a fingerprint and checks fingerprint dictionary for a match
-# Arguments: 
-# cur_fp, list of integers representing the fingerprint
-def detect_near_similars(cur_fp):
-    global fingerprints
-    for fp in fingerprints:
-        if similar(fp, cur_fp):
-            return True
-    return False
-
-
-def similar(A, B):
-    global DUPLICATE_THRESHOLD
-    card_union = len([i for i in A if i in B])
-    s = card_union / (len(A) + len(B) - card_union)
-    if s >= DUPLICATE_THRESHOLD:
-        print("Similarity Factor:", s)
-        return True
-    else:
-        return False
-    #return s >= DUPLICATE_THRESHOLD
-
-
-#detect near duplicates using fingerprint method
-def compute_fingerprint(tokens):
-    triple_lst = []
-    #print(tokens)
-    # add triplets to triple_lst
-    for i in range(len(tokens)-2):
-        triple_lst.append([tokens[i], tokens[i+1], tokens[i+2]])
-    
-    # hash each triplet
-    hashed_lst = [fingerprint_hash(lst) for lst in triple_lst]
-    res = [v for v in hashed_lst if v % 4 == 0]
-    return res
-
-
-def fingerprint_hash(word):
-    res = 0
-    for w in word:
-        for c in w:
-            res += ord(c)
-    return res

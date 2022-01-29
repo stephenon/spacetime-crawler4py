@@ -1,0 +1,36 @@
+imilarity Factor: 0.9193548387096774
+SIMILARTY DETECTED
+2022-01-28 17:23:19,564 - Worker-0 - INFO - Downloaded https://www.informatics.uci.edu/very-top-footer-menu-items/site-map, status <200>, using cache ('styx.ics.uci.edu', 9009).
+2022-01-28 17:23:20,672 - Worker-0 - INFO - Downloaded http://www.informatics.uci.edu/menu-very-top/news, status <200>, using cache ('styx.ics.uci.edu', 9009).
+Similarity Factor: 0.9193548387096774
+SIMILARTY DETECTED
+2022-01-28 17:23:21,669 - Worker-0 - INFO - Downloaded http://www.informatics.uci.edu/menu-very-top/site-map, status <200>, using cache ('styx.ics.uci.edu', 9009).
+Similarity Factor: 1.0
+SIMILARTY DETECTED
+2022-01-28 17:23:22,470 - Worker-0 - INFO - Downloaded http://www.informatics.uci.edu/menu-very-top/people, status <200>, using cache ('styx.ics.uci.edu', 9009).
+Similarity Factor: 2.024705221785514
+SIMILARTY DETECTED
+2022-01-28 17:23:23,603 - Worker-0 - INFO - Downloaded http://www.informatics.uci.edu/impact/community-service, status <404>, using cache ('styx.ics.uci.edu', 9009).
+2022-01-28 17:23:24,202 - Worker-0 - INFO - Downloaded http://www.informatics.uci.edu/impact/successful-alumni, status <404>, using cache ('styx.ics.uci.edu', 9009).
+2022-01-28 17:23:24,800 - Worker-0 - INFO - Downloaded https://www.informatics.uci.edu/very-top-footer-menu-items/contact, status <200>, using cache ('styx.ics.uci.edu', 9009).
+Similarity Factor: 1.0319148936170213
+SIMILARTY DETECTED
+2022-01-28 17:23:25,537 - Worker-0 - INFO - Downloaded https://www.informatics.uci.edu/very-top-footer-menu-items/people, status <200>, using cache ('styx.ics.uci.edu', 9009).
+Similarity Factor: 2.024705221785514
+SIMILARTY DETECTED
+2022-01-28 17:23:26,639 - Worker-0 - INFO - Downloaded https://www.cs.uci.edu, status <200>, using cache ('styx.ics.uci.edu', 9009).
+Similarity Factor: 1.0
+SIMILARTY DETECTED
+2022-01-28 17:23:27,493 - Worker-0 - INFO - Downloaded https://www.ics.uci.edu, status <200>, using cache ('styx.ics.uci.edu', 9009).
+Similarity Factor: 1.0
+SIMILARTY DETECTED
+2022-01-28 17:23:28,304 - Worker-0 - INFO - Frontier is empty. Stopping Crawler.
+Report Question #1:
+Visited 4815 UNIQUE pages
+Report Question #2:
+Longest page: http://www.ics.uci.edu/~wjohnson/BIDA/Ch8/prioriterates.txt
+Number of words: 78455
+Report Question #3:
+['research', 'computer', 'ramesh', 'information', 'students', '2021', 'will', 'software', 'student', 'current', 'news', 'past', 'events', 'data', 'uci', 'courses', 'science', '2016', 'books', '2018', 'jain', 'people', 'search', '2020', 'engineering', '2019', 'graduate', 'projects', 'informatics', 'undergraduate', 'computing', 'design', 'can', 'may', '2017', 'october', 'ics', 'companies', 'new', 'department', '2015', 'university', 'september', 'contact', 'theme', 'read', 'time', 'learning', 'one', 'irvine']
+Report Question #4:
+[('http://archive.ics.uci.edu', 4), ('http://asterix.ics.uci.edu', 1), ('http://checkmate.ics.uci.edu', 1), ('http://cloudberry.ics.uci.edu', 3), ('http://code.ics.uci.edu', 1), ('http://computableplant.ics.uci.edu', 24), ('http://cradl.ics.uci.edu', 2), ('http://cwicsocal18.ics.uci.edu', 1), ('http://duttgroup.ics.uci.edu', 1), ('http://elms.ics.uci.edu', 1), ('http://esl.ics.uci.edu', 1), ('http://fr.ics.uci.edu', 2), ('http://frost.ics.uci.edu', 1), ('http://futurehealth.ics.uci.edu', 2), ('http://graphics.ics.uci.edu', 1), ('http://graphmod.ics.uci.edu', 1), ('http://hai.ics.uci.edu', 1), ('http://i-sensorium.ics.uci.edu', 1), ('http://intranet.ics.uci.edu', 1), ('http://ipubmed.ics.uci.edu', 1), ('http://isg.ics.uci.edu', 2), ('http://keys.ics.uci.edu', 1), ('http://luci.ics.uci.edu', 1), ('http://malek.ics.uci.edu', 1), ('http://mcs.ics.uci.edu', 1), ('http://mhcid.ics.uci.edu', 3), ('http://mondego.ics.uci.edu', 3), ('http://plrg.ics.uci.edu', 11), ('http://psearch.ics.uci.edu', 1), ('http://riscit.ics.uci.edu', 1), ('http://sconce.ics.uci.edu', 2), ('http://sdcl.ics.uci.edu', 145), ('http://sherlock.ics.uci.edu', 1), ('http://sli.ics.uci.edu', 103), ('http://sourcerer.ics.uci.edu', 1), ('http://sprout.ics.uci.edu', 1), ('http://tastier.ics.uci.edu', 1), ('http://vision.ics.uci.edu', 4), ('http://wics.ics.uci.edu', 5), ('http://www-db.ics.uci.edu', 1), ('http://www.cert.ics.uci.edu', 1), ('http://www.graphics.ics.uci.edu', 1), ('http://www.ics.uci.edu', 405), ('http://www.informatics.uci.edu', 4), ('http://xtune.ics.uci.edu', 6), ('https://accessibility.ics.uci.edu', 1), ('https://acoi.ics.uci.edu', 45), ('https://archive.ics.uci.edu', 1), ('https://cbcl.ics.uci.edu', 3), ('https://chenli.ics.uci.edu', 1), ('https://cloudberry.ics.uci.edu', 33), ('https://cml.ics.uci.edu', 113), ('https://code.ics.uci.edu', 11), ('https://cradl.ics.uci.edu', 6), ('https://create.ics.uci.edu', 6), ('https://cwicsocal18.ics.uci.edu', 9), ('https://cyberclub.ics.uci.edu', 1), ('https://dgillen.ics.uci.edu', 16), ('https://duttgroup.ics.uci.edu', 41), ('https://emj.ics.uci.edu', 25), ('https://hack.ics.uci.edu', 1), ('https://helpdesk.ics.uci.edu', 1), ('https://industryshowcase.ics.uci.edu', 17), ('https://isg.ics.uci.edu', 48), ('https://jgarcia.ics.uci.edu', 1), ('https://luci.ics.uci.edu', 3), ('https://mcs.ics.uci.edu', 21), ('https://mdogucu.ics.uci.edu', 1), ('https://mds.ics.uci.edu', 11), ('https://mhcid.ics.uci.edu', 9), ('https://mse.ics.uci.edu', 1), ('https://mswe.ics.uci.edu', 11), ('https://nalini.ics.uci.edu', 5), ('https://ngs.ics.uci.edu', 1207), ('https://redmiles.ics.uci.edu', 3), ('https://seal.ics.uci.edu', 1), ('https://sli.ics.uci.edu', 151), ('https://statconsulting.ics.uci.edu', 1), ('https://student-council.ics.uci.edu', 1), ('https://support.ics.uci.edu', 1), ('https://swiki.ics.uci.edu', 1), ('https://tippersweb.ics.uci.edu', 1), ('https://transformativeplay.ics.uci.edu', 36), ('https://ugradforms.ics.uci.edu', 1), ('https://unite.ics.uci.edu', 10), ('https://vision.ics.uci.edu', 1), ('https://wearablegames.ics.uci.edu', 2), ('https://wics.ics.uci.edu', 260), ('https://www.ics.uci.edu', 114), ('https://www.informatics.uci.edu', 291)]

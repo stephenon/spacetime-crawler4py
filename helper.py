@@ -1,4 +1,5 @@
 import re
+from urllib.parse import urlparse
 # FILE WITH HELPER FUNCTIONS FOR scraper.py
 
 stopwords = {"how's", 'between', 'their', 'cannot', 'does', "doesn't", 'same', 'of', "couldn't", "you'd", "hadn't", 'most',
@@ -88,3 +89,8 @@ def maxFifty(frequencies):
         top50.append(topword[0])
         del frequencies[topword[0]]
     return top50
+
+def deqf(url):
+    parsed = urlparse(url)
+    return parsed._replace(query="")._replace(fragment="").geturl()
+    #return parsed.scheme + "://" + parsed.netloc + parsed.path

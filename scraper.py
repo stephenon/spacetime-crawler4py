@@ -1,11 +1,11 @@
 import re
-from urllib.parse import urlparse, urldefrag
+from urllib.parse import urlparse
 from lxml import html
 from lxml.html.clean import Cleaner
-from helper import tokenize, computeWordFrequencies, allWordFrequencies, maxFifty
+from helper import tokenize, computeWordFrequencies, allWordFrequencies, maxFifty, deqf
 
 # global data structures
-DUPLICATE_THRESHOLD = 0.5
+DUPLICATE_THRESHOLD = 0.75
 visited_pages = dict()
 longest_page = {"url" : "http://www.ics.uci.edu", "number of words" : 0}
 iue_subdomains = dict() # urls : num of unique pages
@@ -105,14 +105,9 @@ def extract_next_links(url, resp):
     #print(type(url))    
     # defragment and dequery urls
     #links = [urldefrag(url)[0] for url in links] # urldefrag returns a named tuple (defragmented url, fragment)
-    links = [urldeqf(url) for url in links]
+    links = [deqf(url) for url in links]
 
     return links
-
-def deqf(url):
-    parsed = urlparse(url)
-    return parsed._replace(query="")._replace(fragment="").geturl()
-    #return parsed.scheme + "://" + parsed.netloc + parsed.path
 
 # handle relative vs absolute urls
 # check if under valid domains
@@ -162,8 +157,14 @@ def detect_near_similars(cur_fp):
 
 def similar(A, B):
     global DUPLICATE_THRESHOLD
-    s = len([i for i in A if i in B]) / (len(A) + len(B))
-    return s >= DUPLICATE_THRESHOLD
+    card_union = len([i for i in A if i in B])
+    s = card_union / (len(A) + len(B) - card_union)
+    if s >= DUPLICATE_THRESHOLD:
+        print("Similarity Factor:", s)
+        return True
+    else:
+        return False
+    #return s >= DUPLICATE_THRESHOLD
 
 
 #detect near duplicates using fingerprint method

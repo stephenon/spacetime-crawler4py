@@ -1,9 +1,36 @@
 import requests
+from lxml.html.clean import Cleaner
 from lxml import html
+from helper import tokenize
+from scraper import *
+
 evoke = "https://evoke.ics.uci.edu/about/the-evoke-studio/"
-url = "https://wics.ics.uci.edu/events/2021-03-02/"
-res = requests.get(url)
-lxml.html.parse
+url1 = "https://wics.ics.uci.edu/events/2021-03-02/"
+url2 = "https://wics.ics.uci.edu/events/2020-10-09/"
+# GETTING FINGERPRINT FOR URL 1
+res = requests.get(url1)
+
+cleaner = Cleaner(scripts=True, style=True) # cleaner for removing scripts and style tags/content
+cleanedhtml = cleaner.clean_html(res.content)
+source_code = str(html.fromstring(cleanedhtml).text_content())
+tokens1 = tokenize(source_code)
+fp1 = compute_fingerprint(tokens1)
+print("Fingerprint of URL #1:")
+print(fp1)
+
+# GETTING FINGERPRINT FOR URL 2
+res2 = requests.get(url2)
+
+#cleaner = Cleaner(scripts=True, style=True) # cleaner for removing scripts and style tags/content
+cleanedhtml2 = cleaner.clean_html(res2.content)
+source_code2 = str(html.fromstring(cleanedhtml2).text_content())
+tokens2 = tokenize(source_code2)
+fp2 = compute_fingerprint(tokens2)
+print("Fingerprint of URL #2:")
+print(fp2)
+
+print("SIMILAR: ", similar(fp1, fp2))
+
 '''
 from lxml import html
 

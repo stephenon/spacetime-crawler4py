@@ -104,7 +104,7 @@ def extract_next_links(url, resp):
     domain = parsed.scheme + "://" + parsed.netloc
     if "ics.uci.edu" in domain:
         if domain in iue_subdomains:
-            iue_subdomains[domain] += 1
+            iue_subdomains[domain] += 1 # NEED to check for www. or not
         else:
             iue_subdomains[domain] = 1
 
@@ -127,8 +127,8 @@ def is_valid(url):
     try:
         parsed = urlparse(url)
         # TO TEST QUESTION 4
-        if len(visited_pages) >= 5:
-            return False
+        #if len(visited_pages) >= 5:
+        #    return False
         # END OF TESTING QUESTION 4
         if blacklisted(parsed):
             return False

@@ -1,6 +1,6 @@
 import requests
 from lxml.html.clean import Cleaner
-from lxml import html
+from lxml import html, etree
 from helper import *
 from scraper import *
 from sys import getsizeof
@@ -10,12 +10,22 @@ evoke = "https://evoke.ics.uci.edu/about/the-evoke-studio/"
 url1 = "https://wics.ics.uci.edu/events/2021-03-02/"
 #url1 = "https://evoke.ics.uci.edu/qs-personal-data-landscapes-poster"
 url2 = "https://wics.ics.uci.edu/events/2020-10-09/"
+deadurl = "http://flamingo.ics.uci.edu/._.DS_Store"
 
-# testing with open creation
-f = open("results.txt", "w")
-#f.write("hello stephen\n i hope this works")
-f.write("testing")
 
+
+# dres = requests.get(deadurl)
+
+# try:
+#     html.fromstring(dres.content)
+#     print("tesT" + 1)
+# except etree.ParserError:
+#     pass
+#print(type(dres.content))
+#print(dres.content == 0)
+#print(dres.content.isEmpty())
+
+'''
 # GETTING FINGERPRINT FOR URL 1
 res = requests.get(url1)
 
@@ -46,3 +56,4 @@ print(fp2)
 
 print("SIMILAR: ", similar(fp1, fp2))
 
+'''

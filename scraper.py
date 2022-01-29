@@ -1,6 +1,6 @@
 import re
 from urllib.parse import urlparse
-from lxml import html
+from lxml import html, etree
 from lxml.html.clean import Cleaner
 from helper import tokenize, computeWordFrequencies, allWordFrequencies, maxFifty, deqf
 from detection import *
@@ -36,7 +36,12 @@ def report():
         f.write(f"{maxFifty(frequencies)}\n")
         # 4, ics.uci.edu subdomains
         f.write("Report Question #4:\n")
-        f.write(f"{sorted(iue_subdomains.items())}\n")
+        subdomains = sorted(iue_subdomains.items())
+        f.write(f"{len(subdomains)} subdomains\n")
+        for pair in subdomains:
+            f.write(f"{pair[0]}, {pair[1]}\n")
+
+        #f.write(f"{sorted(iue_subdomains.items())}\n")
 
         f.close()
 
@@ -70,8 +75,16 @@ def extract_next_links(url, resp):
 
     # read HTML from resp.raw_response.content for report
     # read urls before clean
-    source_code = html.fromstring(resp.raw_response.content)
-    links = source_code.xpath('//a/@href') # list of all links on current page
+    # print(url)
+    try:
+        source_code = html.fromstring(resp.raw_response.content)
+    except etree.ParserError:
+        return list()
+    #links = source_code.xpath('//a/@href') # list of all links on current page
+    #print("Before abs:", links)
+    source_code.make_links_absolute(resp.url)
+    links = source_code.xpath('//a/@href')
+    #print("After abs:", links)
 
     # clean html for text reading
     cleaner = Cleaner(scripts=True, style=True) # cleaner for removing scripts and style tags/content
@@ -102,11 +115,25 @@ def extract_next_links(url, resp):
 
     parsed = urlparse(url)
     domain = parsed.scheme + "://" + parsed.netloc
-    if "ics.uci.edu" in domain:
-        if domain in iue_subdomains:
-            iue_subdomains[domain] += 1 # NEED to check for www. or not
+    if ".ics.uci.edu" in domain: #and parsed.netloc != "www.ics.uci.edu" and parsed.netloc != "ics.uci.edu":
+        netloc = "www."+parsed.netloc if not re.match(r"^www.", parsed.netloc) else parsed.netloc
+        if re.match(r"^https", parsed.scheme):  # 
+            alt = "http://" + netloc
+            if alt in iue_subdomains:
+                iue_subdomains[alt] += 1
+            else:
+                iue_subdomains[parsed.scheme + "://" + netloc] = 1
         else:
-            iue_subdomains[domain] = 1
+            alt = "https://" + netloc
+            if alt in iue_subdomains:
+                iue_subdomains[alt] += 1
+            else:
+                iue_subdomains[parsed.scheme + "://" + netloc] = 1
+
+        #if domain in iue_subdomains:
+            #iue_subdomains[domain] += 1 # NEED to check for www. or not
+        #else:
+            #iue_subdomains[domain] = 1
 
 
     #print(type(url))    

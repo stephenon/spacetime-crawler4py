@@ -5,11 +5,15 @@ from lxml.html.clean import Cleaner
 from helper import tokenize, computeWordFrequencies, allWordFrequencies, maxFifty, deqf
 from detection import *
 
+#
+
 # global data structures
 visited_pages = dict()
 longest_page = {"url" : "http://www.ics.uci.edu", "number of words" : 0}
 iue_subdomains = dict() # urls : num of unique pages
 fingerprints = set()
+query_blacklist = set("replytocom")
+
 
 # variables for debugging
 DEBUG = True
@@ -18,20 +22,23 @@ DEBUG = True
 # only prints report during DEBUGGING
 def report():
     if DEBUG:
+        f = open("results.txt", "w")
         # 1, num of UNIQUE pages visited
-        print("Report Question #1:")
-        print(f"Visited {len(visited_pages)} UNIQUE pages")
+        f.write("Report Question #1:\n")
+        f.write(f"Visited {len(visited_pages)} UNIQUE pages\n")
         # 2, stop words are excluded from count
-        print("Report Question #2:")
-        print(f"Longest page: {longest_page['url']}")
-        print(f"Number of words: {longest_page['number of words']}")
+        f.write("Report Question #2:\n")
+        f.write(f"Longest page: {longest_page['url']}\n")
+        f.write(f"Number of words: {longest_page['number of words']}\n")
         # 3, most common 50 words
-        print("Report Question #3:")
+        f.write("Report Question #3:\n")
         frequencies = allWordFrequencies(visited_pages)
-        print(maxFifty(frequencies))
+        f.write(f"{maxFifty(frequencies)}\n")
         # 4, ics.uci.edu subdomains
-        print("Report Question #4:")
-        print(sorted(iue_subdomains.items()))
+        f.write("Report Question #4:\n")
+        f.write(f"{sorted(iue_subdomains.items())}\n")
+
+        f.close()
 
         
 
@@ -120,17 +127,19 @@ def is_valid(url):
     try:
         parsed = urlparse(url)
         # TO TEST QUESTION 4
-        #if len(visited_pages) >= 20:
-        #    return False
+        if len(visited_pages) >= 5:
+            return False
         # END OF TESTING QUESTION 4
+        if blacklisted(parsed):
+            return False
         if url in visited_pages:
             return False
         if parsed.scheme not in set(["http", "https"]):
             return False
-        if re.match(r"^\.today\.uci\.edu", parsed.netloc): # NOT SURE, NEED TO DOUBLE CHECK
+        if re.match(r"^(.+\.)?today\.uci\.edu", parsed.netloc): # NOT SURE, NEED TO DOUBLE CHECK
             if not re.match(r"^department\/information_computer_sciences\/.*$", parsed.path):
                 return False
-        if not re.match(r"^.*\.(ics\.uci\.edu|cs\.uci\.edu|informatics\.uci\.edu|stats\.uci\.edu|today\.uci\.edu)$", parsed.netloc):
+        if not re.match(r"^(.+\.)?(ics\.uci\.edu|cs\.uci\.edu|informatics\.uci\.edu|stats\.uci\.edu|today\.uci\.edu)$", parsed.netloc):
             return False
         return not re.match(
             r".*\.(css|js|bmp|gif|jpe?g|ico"
@@ -146,3 +155,10 @@ def is_valid(url):
         print ("TypeError for ", parsed)
         raise
 
+# Dectects if query of current url is blacklisted
+def blacklisted(parsed):
+    global query_blacklist
+    for query in query_blacklist:
+        if query in parsed.query:
+            return True
+    return False

@@ -69,6 +69,8 @@ def extract_next_links(url, resp):
     '''-----------------------------------------------------------'''
     global visited_pages, longest_page, fingerprints
     visited_pages[url] = {} # visited_page with error might cause problems? if dictionary isn't properly formatted
+    parsed = urlparse(url)
+    iue_check(parsed)
     # checking for status 200 OK
     if resp.status != 200:
         return list()
@@ -112,31 +114,7 @@ def extract_next_links(url, resp):
     if wordtotal > longest_page["number of words"]: # update longest_page if needed
         longest_page["url"] = url
         longest_page["number of words"] = wordtotal
-
-    parsed = urlparse(url)
-    domain = parsed.scheme + "://" + parsed.netloc
-    if ".ics.uci.edu" in domain: #and parsed.netloc != "www.ics.uci.edu" and parsed.netloc != "ics.uci.edu":
-        netloc = "www."+parsed.netloc if not re.match(r"^www.", parsed.netloc) else parsed.netloc
-        if re.match(r"^https", parsed.scheme):  # 
-            alt = "http://" + netloc
-            if alt in iue_subdomains:
-                iue_subdomains[alt] += 1
-            else:
-                iue_subdomains[parsed.scheme + "://" + netloc] = 1
-        else:
-            alt = "https://" + netloc
-            if alt in iue_subdomains:
-                iue_subdomains[alt] += 1
-            else:
-                iue_subdomains[parsed.scheme + "://" + netloc] = 1
-
-        #if domain in iue_subdomains:
-            #iue_subdomains[domain] += 1 # NEED to check for www. or not
-        #else:
-            #iue_subdomains[domain] = 1
-
-
-    #print(type(url))    
+  
     # defragment and dequery urls
     #links = [urldefrag(url)[0] for url in links] # urldefrag returns a named tuple (defragmented url, fragment)
     links = [deqf(url) for url in links]
@@ -189,3 +167,28 @@ def blacklisted(parsed):
         if query in parsed.query:
             return True
     return False
+
+# ics.uci.edu subdomain checker
+def iue_check(parsed):
+    global iue_subdomains
+    domain = parsed.scheme + "://" + parsed.netloc
+    if ".ics.uci.edu" in domain and "www.ics.uci.edu" not in domain: #and parsed.netloc != "www.ics.uci.edu" and parsed.netloc != "ics.uci.edu":
+        netloc = "www."+parsed.netloc if not re.match(r"^www.", parsed.netloc) else parsed.netloc
+        if re.match(r"^https", parsed.scheme): # if url uses https
+            alt = "http://" + netloc
+            default = parsed.scheme + "://" + netloc
+            if alt in iue_subdomains:
+                iue_subdomains[alt] += 1
+            elif default in iue_subdomains:
+                iue_subdomains[default] += 1
+            else: # create new key:value pair in iue_subdomains with default
+                iue_subdomains[default] = 1
+        else: # url uses http
+            alt = "https://" + netloc
+            default = parsed.scheme + "://" + netloc
+            if alt in iue_subdomains:
+                iue_subdomains[alt] += 1
+            elif default in iue_subdomains:
+                iue_subdomains[default] += 1
+            else: # create new key:value pair in iue_subdomains with default
+                iue_subdomains[default] = 1

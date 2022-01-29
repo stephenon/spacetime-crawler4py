@@ -6,7 +6,6 @@ Number of words: 1124
 Report Question #3:
 ['data', 'science', 'financial', 'information', 'aid', 'program', 'career', 'uci', 'ics', 'students', 'will', 'statistical', '2021', 'computer', 'admissions', 'tuition', 'apply', 'development', 'contact', 'student', 'overview', 'application', 'master', 'events', 'research', 'methods', 'academic', 'team', 'school', 'questions', 'faculty', 'time', 'ecosystem', 'asked', 'graduate', 'learning', 'meet', 'frequently', 'statistics', 'academics', 'department', 'bren', 'irvine', 'analysis', 'professional', 'design', 'donald', 'year', 'course', 'series']
 Report Question #4:
-3 subdomains
-https://www.ics.uci.edu, 1
-https://www.mds.ics.uci.edu, 1
+2 subdomains
+https://www.mds.ics.uci.edu, 11
 https://www.statconsulting.ics.uci.edu, 1

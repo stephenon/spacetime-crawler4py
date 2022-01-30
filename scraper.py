@@ -27,19 +27,19 @@ def report():
         f.write("Report Question #1:\n")
         f.write(f"Visited {len(visited_pages)} UNIQUE pages\n")
         # 2, stop words are excluded from count
-        f.write("Report Question #2:\n")
-        f.write(f"Longest page: {longest_page['url']}\n")
-        f.write(f"Number of words: {longest_page['number of words']}\n")
-        # 3, most common 50 words
-        f.write("Report Question #3:\n")
-        frequencies = allWordFrequencies(visited_pages)
-        f.write(f"{maxFifty(frequencies)}\n")
-        # 4, ics.uci.edu subdomains
-        f.write("Report Question #4:\n")
-        subdomains = sorted(iue_subdomains.items())
-        f.write(f"{len(subdomains)} subdomains\n")
-        for pair in subdomains:
-            f.write(f"{pair[0]}, {pair[1]}\n")
+        # f.write("Report Question #2:\n")
+        # f.write(f"Longest page: {longest_page['url']}\n")
+        # f.write(f"Number of words: {longest_page['number of words']}\n")
+        # # 3, most common 50 words
+        # f.write("Report Question #3:\n")
+        # frequencies = allWordFrequencies(visited_pages)
+        # f.write(f"{maxFifty(frequencies)}\n")
+        # # 4, ics.uci.edu subdomains
+        # f.write("Report Question #4:\n")
+        # subdomains = sorted(iue_subdomains.items())
+        # f.write(f"{len(subdomains)} subdomains\n")
+        # for pair in subdomains:
+        #     f.write(f"{pair[0]}, {pair[1]}\n")
 
         #f.write(f"{sorted(iue_subdomains.items())}\n")
 
@@ -69,8 +69,8 @@ def extract_next_links(url, resp):
     '''-----------------------------------------------------------'''
     global visited_pages, longest_page, fingerprints
     visited_pages[url] = {} # visited_page with error might cause problems? if dictionary isn't properly formatted
-    parsed = urlparse(url)
-    iue_check(parsed)
+    # parsed = urlparse(url)
+    # iue_check(parsed)
     # checking for status 200 OK
     if resp.status != 200:
         return list()
@@ -78,7 +78,7 @@ def extract_next_links(url, resp):
     # read HTML from resp.raw_response.content for report
     # read urls before clean
     # print(url)
-    try:
+    try: # for empty content
         source_code = html.fromstring(resp.raw_response.content)
     except etree.ParserError:
         return list()
@@ -110,10 +110,10 @@ def extract_next_links(url, resp):
     tokens = computeWordFrequencies(tokens) # dictionary
     visited_pages[url] = tokens # update visited_pages
     
-    wordtotal = sum(visited_pages[url].values())
-    if wordtotal > longest_page["number of words"]: # update longest_page if needed
-        longest_page["url"] = url
-        longest_page["number of words"] = wordtotal
+    # wordtotal = sum(visited_pages[url].values())
+    # if wordtotal > longest_page["number of words"]: # update longest_page if needed
+    #     longest_page["url"] = url
+    #     longest_page["number of words"] = wordtotal
   
     # defragment and dequery urls
     #links = [urldefrag(url)[0] for url in links] # urldefrag returns a named tuple (defragmented url, fragment)
